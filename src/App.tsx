@@ -80,6 +80,8 @@ function App() {
   return (
     <>
       <QuestionComponent
+        quizzes={quizzes}
+        activeCategory={activeCategory}
         question={currentQuestion}
         onAnswer={questionAnswerHandler}
         totalQuestions={currentQuiz.questions.length}
