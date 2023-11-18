@@ -1,5 +1,5 @@
-import { FC, useState } from 'react';
-import { Question } from '../models/types';
+import { FC, useState } from "react";
+import { Question } from "../models/types";
 
 type QuestionComponentProps = {
   question: Question;
@@ -20,6 +20,8 @@ const Questions: FC<QuestionComponentProps> = ({
     setSelectedAnswer(option);
   };
 
+  console.log(selectedAnswer)
+
   const handleNextClick = () => {
     if (selectedAnswer) {
       onAnswer(selectedAnswer);
@@ -30,28 +32,35 @@ const Questions: FC<QuestionComponentProps> = ({
   };
 
   return (
-    <div>
-      <h2>{question.question}</h2>
-      <ul>
-        {question.options.map((option) => (
-          <li
-            key={option}
-            onClick={() => handleOptionClick(option)}
-            style={{ cursor: 'pointer', backgroundColor: selectedAnswer === option ? 'lightblue' : 'white' }}
-          >
-            {option}
-          </li>
-        ))}
-      </ul>
-      <p>
-        Question {currentQuestion} of {totalQuestions}
-      </p>
-      {currentQuestion < totalQuestions ? (
-        <button onClick={handleNextClick}>Next Question</button>
-      ) : (
-        <button onClick={() => onAnswer(selectedAnswer as string)}>Finish Quiz</button>
-      )}
-    </div>
+    <main className="h-screen w-screen flex justify-center items-center bg-slate-100 gap-8">
+      <div className="w-1/2 pl-24 h-96">
+        <h2>
+          Question {currentQuestion} of {totalQuestions}
+        </h2>
+        <p className="text-2xl">{question.question}</p>
+      </div>
+      <div className="flex flex-col w-1/2 h-96 pr-24">
+        <ul>
+          {question.options.map((option, index) => (
+            <li
+              key={option}
+              onClick={() => handleOptionClick(option)}
+              tabIndex={0}
+              className={`bg-white rounded-lg p-4 text-left mb-4 flex items-center font-bold cursor-pointer group border-4 border-white focus:outline-none ${selectedAnswer === option ? 'active:border-purple-500 focus:border-purple-600' : ""}`}
+            >
+              <span className={`bg-slate-200 text-slate-700 rounded-lg mr-4 w-12 h-12 flex items-center justify-center group-hover:bg-purple-300 group-hover:text-purple-700 ${selectedAnswer === option ? 'group-focus:bg-purple-600 group-focus:text-white' : ""}`}>{String.fromCharCode(65 + index)}</span>{option}
+            </li>
+          ))}
+        </ul>
+        {currentQuestion < totalQuestions ? (
+          <button onClick={handleNextClick} className="bg-purple-600 text-white text-center rounded-lg p-6 mb-4 font-bold hover:bg-purple-400">Submit Answer</button>
+        ) : (
+          <button onClick={() => onAnswer(selectedAnswer as string)}>
+            Finish Quiz
+          </button>
+        )}
+      </div>
+    </main>
   );
 };
 

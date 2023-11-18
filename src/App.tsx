@@ -5,6 +5,7 @@ import quizData from "../data.json";
 import "./App.css";
 import Categories from "./components/Categories";
 import QuestionComponent from "./components/Question";
+import Score from "./components/Score";
 
 function App() {
   const [activeQuestion, setActiveQuestion] = useState<number>(0);
@@ -36,7 +37,7 @@ function App() {
       setCorrectAnswers((prevCorrectAnswers) => prevCorrectAnswers + 1);
     }
 
-    // Move to the next question
+    // Move to the next question by updating state properly
     setActiveQuestion((prevQuestion) => prevQuestion + 1);
   };
 
@@ -63,19 +64,15 @@ function App() {
 
   if (!currentQuestion) {
     return (
-      <div>
-        <div>
-          <h2>Quiz completed</h2>
-          <h3>You scored...</h3>
-        </div>
-        <div>
-          <p>{correctAnswers} <br /> out of {activeCategory.length}</p>
-          <button onClick={resetQuiz}>Play Again</button>
-        </div>
-      </div>
+      <Score
+        correctAnswers={correctAnswers}
+        currentQuiz={currentQuiz}
+        resetQuiz={resetQuiz}
+      />
     );
   }
 
+  // this is to track the scores and the quiz info
   console.log(`The selected category is: ${activeCategory}`);
   console.log(`The selected answer is: ${JSON.stringify(userAnswers)}`);
   console.log(`Score: ${correctAnswers} / ${currentQuiz?.questions.length}`);
