@@ -55,7 +55,7 @@ const Questions: FC<QuestionComponentProps> = ({
         {currentQuestion < totalQuestions ? (
           <button onClick={handleNextClick} className="bg-purple-600 text-white text-center rounded-lg p-6 mb-4 font-bold hover:bg-purple-400">Submit Answer</button>
         ) : (
-          <button onClick={() => onAnswer(selectedAnswer as string)}>
+          <button onClick={() => onAnswer(selectedAnswer as string)} className="bg-purple-600 text-white text-center rounded-lg p-6 mb-4 font-bold hover:bg-purple-400">
             Finish Quiz
           </button>
         )}
