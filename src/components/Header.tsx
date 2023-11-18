@@ -5,7 +5,7 @@ type HeaderProps = {
 
 const Header = ({ category, image }: HeaderProps) => {
   return (
-    <nav className="flex justify-between px-24 pt-16 pb-12">
+    <nav className="flex justify-between px-24 pt-16 pb-16">
       <div className="flex items-center">
         <img src={image} alt={`The category is ${category}`} className="mr-8" />
         <h1>{category}</h1>

@@ -37,6 +37,8 @@ const Questions: FC<QuestionComponentProps> = ({
     }
   };
 
+  const progressPercentage = (currentQuestion / totalQuestions) * 100;
+
   return (
     <>
       <main className="h-screen w-screen bg-slate-100">
@@ -45,11 +47,19 @@ const Questions: FC<QuestionComponentProps> = ({
           image={quizzes.find((q) => q.title === activeCategory)?.icon}
         />
         <section className="flex justify-center items-center gap-8">
-          <div className="w-1/2 pl-24 h-96">
-            <h2>
-              Question {currentQuestion} of {totalQuestions}
-            </h2>
-            <p className="text-2xl">{question.question}</p>
+          <div className="w-1/2 pl-24 h-96 flex flex-col justify-between">
+            <div className="">
+              <h2 className="italic">
+                Question {currentQuestion} of {totalQuestions}
+              </h2>
+              <p className="text-2xl">{question.question}</p>
+            </div>
+            <div className="rounded-lg bg-purple-300 h-2">
+              <div
+                className="bg-purple-600 h-full rounded-lg"
+                style={{ width: `${progressPercentage}%` }}
+              ></div>
+            </div>
           </div>
           <div className="flex flex-col w-1/2 h-96 pr-24">
             <ul>
