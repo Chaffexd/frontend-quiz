@@ -8,12 +8,12 @@ type Score = {
 
 const Score = ({ correctAnswers, currentQuiz, resetQuiz }: Score) => {
   return (
-    <main className="h-screen w-screen flex justify-center items-center bg-slate-100 gap-8">
-      <div className="w-1/2 pl-24 h-96">
+    <main className="h-screen w-screen flex flex-col lg:flex-row justify-center items-center bg-slate-100 lg:gap-8">
+      <div className="md:w-1/2 lg:w-1/2 lg:pl-24 lg:h-96 px-4">
         <h2 className="text-7xl font-thin">Quiz completed</h2>
         <h3 className="text-7xl">You scored...</h3>
       </div>
-      <div className="w-1/2 pr-24 h-96">
+      <div className="md:w-1/2 lg:w-1/2 lg:pr-24 lg:h-96 h-2/5 pt-8 w-full px-4">
         <p className="bg-white flex flex-col justify-center items-center rounded-lg h-4/6 mb-6 text-center font-bold text-5xl">
           {correctAnswers} <br /> <span className="font-thin text-base">out of {currentQuiz?.questions.length}</span>
         </p>

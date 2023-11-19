@@ -10,7 +10,6 @@ const Header = ({ category, image }: HeaderProps) => {
         <img src={image} alt={`The category is ${category}`} className="mr-8" />
         <h1 className="font-bold">{category}</h1>
       </div>
-      <div className="flex items-center">Toggle</div>
     </nav>
   );
 };

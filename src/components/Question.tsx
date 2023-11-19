@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Question, Quiz } from "../models/types";
 import Header from "./Header";
+import CurrentQuestion from "./CurrentQuestion";
 
 type QuestionComponentProps = {
   activeCategory: string;
@@ -56,15 +57,14 @@ const Questions = ({
       // Show user feedback before moving to next question based on condition above
       const timeoutId = setTimeout(() => {
         handleMoveToNextQuestion();
-      }, 2000);
+      }, 200000);
 
       // Always clean up the timer
       return () => clearTimeout(timeoutId);
     }
   }, [submitted, correctAnswer]);
 
-  // this calculates the width of the progress bar
-  const progressPercentage = (currentQuestion / totalQuestions) * 100;
+  
 
   return (
     <>
@@ -73,50 +73,61 @@ const Questions = ({
           category={activeCategory}
           image={quizzes.find((q) => q.title === activeCategory)?.icon}
         />
-        <section className="flex justify-center items-center gap-8">
-          <div className="w-1/2 pl-24 h-96 flex flex-col justify-between">
-            <div className="">
-              <h2 className="italic">
-                Question {currentQuestion} of {totalQuestions}
-              </h2>
-              <p className="text-2xl">{question.question}</p>
-            </div>
-            <div className="rounded-lg bg-purple-300 h-2">
-              <div
-                className="bg-purple-600 h-full rounded-lg"
-                style={{ width: `${progressPercentage}%` }}
-              ></div>
-            </div>
-          </div>
-          <div className="flex flex-col w-1/2 h-96 pr-24">
+        <section className="flex flex-col lg:flex-row lg:justify-center items-center lg:gap-8">
+          <CurrentQuestion 
+            currentQuestion={currentQuestion}
+            totalQuestions={totalQuestions}
+            question={question}
+          />
+          <div className="flex flex-col w-1/2 w-5/6 lg:h-96 lg:pr-24">
             <ul>
               {question.options.map((option, index) => (
                 <li
                   key={option}
                   onClick={() => handleOptionClick(option)}
                   tabIndex={0}
-                  className={`bg-white rounded-lg p-4 text-left mb-4 flex items-center font-bold cursor-pointer group border-4 border-white focus:outline-none ${
+                  className={`bg-white rounded-lg p-4 text-left mb-4 flex items-center justify-between font-bold cursor-pointer group border-4 border-white focus:outline-none ${
                     selectedAnswer === option
                       ? `active:border-purple-500 focus:border-purple-600`
                       : ""
                   } ${
                     submitted && option === correctAnswer
-                      ? "bg-green-200" // Correct answer
+                      ? "border-green-500" // Correct answer
                       : submitted && option === selectedAnswer
-                      ? "bg-red-200" // Incorrect answer
+                      ? "border-red-500" // Incorrect answer
                       : ""
                   }`}
                 >
-                  <span
-                    className={`bg-slate-200 text-slate-700 rounded-lg mr-4 w-12 h-12 flex items-center justify-center group-hover:bg-purple-300 group-hover:text-purple-700 ${
-                      selectedAnswer === option
-                        ? "group-focus:bg-purple-600 group-focus:text-white"
-                        : ""
-                    }`}
-                  >
-                    {String.fromCharCode(65 + index)}
+                  <div className="flex items-center">
+                    <span
+                      className={`bg-slate-200 text-slate-700 rounded-lg mr-4 w-12 h-12 flex items-center justify-center group-hover:bg-purple-300 group-hover:text-purple-700 ${
+                        selectedAnswer === option
+                          ? "group-focus:bg-purple-600 group-focus:text-white"
+                          : ""
+                      }
+                      ${
+                        submitted && option === correctAnswer
+                          ? "bg-green-500 text-white"
+                          : submitted && option === selectedAnswer
+                          ? "bg-red-500 text-white"
+                          : ""
+                      }`}
+                    >
+                      {String.fromCharCode(65 + index)}
+                    </span>
+                    <p>{option}</p>
+                  </div>
+                  <span>
+                    <img
+                      src={
+                        submitted && option === correctAnswer
+                          ? "/public/images/icon-correct.svg"
+                          : submitted && option === selectedAnswer
+                          ? "/public/images/icon-incorrect.svg"
+                          : ""
+                      }
+                    />
                   </span>
-                  {option}
                 </li>
               ))}
             </ul>
