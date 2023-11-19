@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { useState, useEffect } from "react";
 import { Question, Quiz } from "../models/types";
 import Header from "./Header";
 
@@ -11,32 +11,59 @@ type QuestionComponentProps = {
   currentQuestion: number;
 };
 
-const Questions: FC<QuestionComponentProps> = ({
+const Questions = ({
   activeCategory,
   quizzes,
   question,
   onAnswer,
   totalQuestions,
   currentQuestion,
-}) => {
+}: QuestionComponentProps) => {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+  const [correctAnswer, setCorrectAnswer] = useState<string | null>(null);
 
   const handleOptionClick = (option: string) => {
     setSelectedAnswer(option);
+    setSubmitted(false); // Reset submitted state when a new option is selected
   };
-
-  console.log(selectedAnswer);
-  console.log(quizzes);
 
   const handleNextClick = () => {
     if (selectedAnswer) {
-      onAnswer(selectedAnswer);
+      // Check if the selected answer is correct
+      const isCorrect = selectedAnswer === question.answer;
+      setCorrectAnswer(isCorrect ? selectedAnswer : question.answer);
+      setSubmitted(true);
     } else {
       return;
       // there is no other alternative, so no error can happen
     }
   };
 
+  const handleMoveToNextQuestion = () => {
+    // Call the onAnswer callback with the selected answer
+    onAnswer(selectedAnswer as string);
+
+    // Reset states and move to the next question
+    setSelectedAnswer(null);
+    setSubmitted(false);
+    setCorrectAnswer(null);
+  };
+
+  // Use useEffect to handle moving to the next question
+  useEffect(() => {
+    if (submitted && correctAnswer !== null) {
+      // Show user feedback before moving to next question based on condition above
+      const timeoutId = setTimeout(() => {
+        handleMoveToNextQuestion();
+      }, 2000);
+
+      // Always clean up the timer
+      return () => clearTimeout(timeoutId);
+    }
+  }, [submitted, correctAnswer]);
+
+  // this calculates the width of the progress bar
   const progressPercentage = (currentQuestion / totalQuestions) * 100;
 
   return (
@@ -70,7 +97,13 @@ const Questions: FC<QuestionComponentProps> = ({
                   tabIndex={0}
                   className={`bg-white rounded-lg p-4 text-left mb-4 flex items-center font-bold cursor-pointer group border-4 border-white focus:outline-none ${
                     selectedAnswer === option
-                      ? "active:border-purple-500 focus:border-purple-600"
+                      ? `active:border-purple-500 focus:border-purple-600`
+                      : ""
+                  } ${
+                    submitted && option === correctAnswer
+                      ? "bg-green-200" // Correct answer
+                      : submitted && option === selectedAnswer
+                      ? "bg-red-200" // Incorrect answer
                       : ""
                   }`}
                 >
@@ -87,7 +120,7 @@ const Questions: FC<QuestionComponentProps> = ({
                 </li>
               ))}
             </ul>
-            {currentQuestion < totalQuestions ? (
+            {!submitted ? (
               <button
                 onClick={handleNextClick}
                 className="bg-purple-600 text-white text-center rounded-lg p-6 mb-4 font-bold hover:bg-purple-400"
@@ -96,10 +129,10 @@ const Questions: FC<QuestionComponentProps> = ({
               </button>
             ) : (
               <button
-                onClick={() => onAnswer(selectedAnswer as string)}
+                onClick={handleMoveToNextQuestion}
                 className="bg-purple-600 text-white text-center rounded-lg p-6 mb-4 font-bold hover:bg-purple-400"
               >
-                Finish Quiz
+                Next Question
               </button>
             )}
           </div>
