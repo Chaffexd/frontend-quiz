@@ -92,9 +92,9 @@ const Questions = ({
                       : ""
                   } ${
                     submitted && option === correctAnswer
-                      ? "border-green-500" // Correct answer
+                      ? "!border-green-500" // Correct answer
                       : submitted && option === selectedAnswer
-                      ? "border-red-500" // Incorrect answer
+                      ? "!border-red-500" // Incorrect answer
                       : ""
                   }`}
                 >
@@ -107,9 +107,9 @@ const Questions = ({
                       }
                       ${
                         submitted && option === correctAnswer
-                          ? "bg-green-500 text-white"
+                          ? "!bg-green-500 !text-white"
                           : submitted && option === selectedAnswer
-                          ? "bg-red-500 text-white"
+                          ? "!bg-red-500 text-white"
                           : ""
                       }`}
                     >
@@ -121,9 +121,9 @@ const Questions = ({
                     <img
                       src={
                         submitted && option === correctAnswer
-                          ? "/public/images/icon-correct.svg"
+                          ? "/images/icon-correct.svg"
                           : submitted && option === selectedAnswer
-                          ? "/public/images/icon-incorrect.svg"
+                          ? "/images/icon-incorrect.svg"
                           : ""
                       }
                     />
