@@ -57,7 +57,7 @@ const Questions = ({
       // Show user feedback before moving to next question based on condition above
       const timeoutId = setTimeout(() => {
         handleMoveToNextQuestion();
-      }, 200000);
+      }, 5000);
 
       // Always clean up the timer
       return () => clearTimeout(timeoutId);
